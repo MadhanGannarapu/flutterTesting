@@ -1,101 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:flutterintegrationtest/files_page.dart';
+import 'package:flutterintegrationtest/home_page.dart';
+import 'package:flutterintegrationtest/settings_page.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Sample'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MyHomePage extends StatelessWidget {
   final String title;
+  final List<Widget> _tabList = [
+    Container(
+      color: Colors.teal,
+      child: Container(
+        child:HomePage()
+      ),
+    ),
+    Container(
+      color: Colors.red,
+      child: Container(
+        child: FilesPage()
+      ),
+    ),
+    Container(
+      color: Colors.purple,
+      child: Container(child: SettingsPage()),
+    )
+  ];
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String _displayValue = "";
-
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('button fired');
-    final _emailController = TextEditingController();
-
-    void _submitData() {
-      final enteredEmail = _emailController.text;
-      setState(() => _displayValue = enteredEmail);
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-              key: Key('counter'),
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                key: Key('textField'),
-                decoration: InputDecoration(
-                    labelText: 'Enter your email',
-                    border: OutlineInputBorder()),
-                controller: _emailController,
-                onSaved: (_) => _submitData(),
+    return DefaultTabController(
+      length: 3,
+      initialIndex: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title.toUpperCase()),
+        ),
+        body: TabBarView(
+          children: _tabList,
+        ),
+        bottomNavigationBar: TabBar(
+          indicatorColor: Colors.amber,
+          labelColor: Colors.amber,
+          unselectedLabelColor: Colors.grey,
+          key: UniqueKey(),
+          tabs: [
+            Tab(
+              text: 'Home',
+              icon: Icon(
+                Icons.home,
+                color: Colors.blueGrey,
               ),
+              key: Key('home'),
             ),
-            RaisedButton(
-              key: Key('signupButton'),
-              child: Text(
-                'Signup',
-                style: TextStyle(color: Colors.white),
+            Tab(
+              text: 'Files',
+              icon: Icon(
+                Icons.ac_unit,
+                color: Colors.blueGrey,
               ),
-              color: Colors.blue,
-              onPressed: _submitData,
+              key: Key('files'),
             ),
-            Text(
-              "Text Field Value: " + _displayValue.toUpperCase(),
-              style: TextStyle(fontSize: 16.0),
+            Tab(
+              text: 'Settings',
+              icon: Icon(
+                Icons.accessibility,
+                color: Colors.blueGrey,
+              ),
+              key: Key('settings'),
             ),
-            Text(_emailController.text, style: TextStyle(color: Colors.black))
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'increment',
-        child: Icon(
-          
-          Icons.add,
-          key: Key('buttonTab'),),
       ),
     );
   }
